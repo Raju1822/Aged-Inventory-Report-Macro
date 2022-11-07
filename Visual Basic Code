@@ -11,7 +11,7 @@ Sub AllPivot()
 
    Call PPO_Inventory 'Code Complete
    
-   MsgBox "All pivots are created succesfully !", vbInformation
+   MsgBox "All pivots are created successfully !", vbInformation
 
 
 End Sub
