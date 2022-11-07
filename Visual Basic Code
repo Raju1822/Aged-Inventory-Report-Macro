@@ -1,0 +1,552 @@
+
+'-------------------
+'   Master Pivot
+'-------------------
+
+Sub AllPivot()
+
+   Call Aged_Inventory 'Code Completed
+
+   Call AssignedVUnassigned 'Need Update
+
+   Call PPO_Inventory 'Code Complete
+   
+   MsgBox "All pivots are created succesfully !", vbInformation
+
+
+End Sub
+
+
+'-----------------------
+' Aged Inventory Pivot -
+'-----------------------
+
+Sub Aged_Inventory()
+
+
+Dim PTable1 As PivotTable
+Dim PTable2 As PivotTable
+Dim PCache As PivotCache
+Dim PRange As Range
+Dim PSheet As Worksheet
+Dim DSheet As Worksheet
+Dim LR As Long
+Dim LC As Long
+
+On Error Resume Next
+
+
+Application.DisplayAlerts = False
+Application.ScreenUpdating = False 'turn OFF the screen updating while running the code.
+Worksheets("Aged Inventory").Delete 'This will delete the exisiting pivot table worksheet
+Worksheets.Add After:=ActiveSheet ' This will add new worksheet
+ActiveSheet.Name = "Aged Inventory" ' This will rename the worksheet as "Aged Inventory"
+On Error GoTo 0
+
+Set PSheet = Worksheets("Aged Inventory")
+Set DSheet = Worksheets("Daily Assignment File")
+
+'Find Last used row and column in data sheet
+LR = DSheet.Cells(Rows.Count, 1).End(xlUp).Row
+LC = DSheet.Cells(1, Columns.Count).End(xlToLeft).Column
+
+'Set the pivot table data range
+Set PRange = DSheet.Cells(1, 1).Resize(LR, LC)
+
+'Set pivot cahe
+Set PCache = ActiveWorkbook.PivotCaches.Create(xlDatabase, SourceData:=PRange)
+
+'-----------1st Pivot Aged Inventory---------
+'--------------------------------------------
+
+'Create blank pivot table
+Set PTable1 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(1, 1), TableName:="Aged_Inventory_Report1")
+
+'Insert WORKABLE_NONWORKABLE to Filter Filed
+With PSheet.PivotTables("Aged_Inventory_Report1").PivotFields("WORKABLE_NONWORKABLE")
+.Orientation = xlPageField
+.Position = 1
+End With
+
+'Insert PLANNING_WORKTYPE to Row Filed & position 2
+With PSheet.PivotTables("Aged_Inventory_Report1").PivotFields("PLANNING_WORKTYPE")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+'Insert RGN_CD to Column Filed & position 1
+With PSheet.PivotTables("Aged_Inventory_Report1").PivotFields("RGN_CD")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("Aged_Inventory_Report1").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+'------------2nd pivot Aged Inventory-------------
+'-------------------------------------------------
+
+Set PTable2 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(1, 12), TableName:="Aged_Inventory_Report2")
+
+'Insert WORKABLE_NONWORKABLE to Filter Filed position 1
+With PSheet.PivotTables("Aged_Inventory_Report2").PivotFields("WORKABLE_NONWORKABLE")
+.Orientation = xlPageField
+.Position = 1
+End With
+
+'Insert PLANNING_WORKTYPE to Filter Filed position 2
+With PSheet.PivotTables("Aged_Inventory_Report2").PivotFields("PLANNING_WORKTYPE")
+.Orientation = xlPageField
+.Position = 1
+End With
+
+
+'Insert ON_OFF to Row Filed & position 1
+With PSheet.PivotTables("Aged_Inventory_Report2").PivotFields("ON_OFF")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+'Insert UHC_NTFY_AGE_BUCKET to Row Filed & position 2
+With PSheet.PivotTables("Aged_Inventory_Report2").PivotFields("UHC_NTFY_AGE_BUCKET")
+.Orientation = xlRowField
+.Position = 2
+End With
+
+'Insert RGN_CD to Column Filed & position 1
+With PSheet.PivotTables("Aged_Inventory_Report2").PivotFields("RGN_CD")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("Aged_Inventory_Report2").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+
+'--------End Piovt-------
+
+
+
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
+
+
+End Sub
+
+
+
+
+'------------------------------
+' Assigned V Unassigned Pivot -
+'------------------------------
+
+
+Sub AssignedVUnassigned()
+
+Dim PTable1 As PivotTable
+Dim PTable2 As PivotTable
+Dim PCache As PivotCache
+Dim PRange As Range
+Dim PSheet As Worksheet
+Dim DSheet As Worksheet
+Dim LR As Long
+Dim LC As Long
+
+On Error Resume Next
+
+Application.DisplayAlerts = False
+Application.ScreenUpdating = False
+Worksheets("Assigned V Unassigned").Delete 'This will delete the exisiting pivot table worksheet
+Worksheets.Add After:=ActiveSheet ' This will add new worksheet
+ActiveSheet.Name = "Assigned V Unassigned" ' This will rename the worksheet as "Aged Inventory"
+On Error GoTo 0
+
+Set PSheet = Worksheets("Assigned V Unassigned")
+Set DSheet = Worksheets("Daily Assignment File")
+
+'Find Last used row and column in data sheet
+LR = DSheet.Cells(Rows.Count, 1).End(xlUp).Row
+LC = DSheet.Cells(1, Columns.Count).End(xlToLeft).Column
+
+'Set the pivot table data range
+Set PRange = DSheet.Cells(1, 1).Resize(LR, LC)
+
+'Set pivot cahe
+Set PCache = ActiveWorkbook.PivotCaches.Create(xlDatabase, SourceData:=PRange)
+
+'----------1st Pivot Assigned V Unassigned------
+'-----------------------------------------------
+
+'Create blank pivot table
+Set PTable1 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(1, 1), TableName:="AssignedVUnassigned_Report1")
+
+
+'Insert to Filter Filed
+'Nothing
+
+
+'Insert PLANNING_WORKTYPE to Row Filed & position 1
+With PSheet.PivotTables("AssignedVUnassigned_Report1").PivotFields("PLANNING_WORKTYPE")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+'Insert Leader/Vendor to Row Field & position 2
+With PSheet.PivotTables("AssignedVUnassigned_Report1").PivotFields("Leader/Vendor")
+.Orientation = xlRowField
+.Position = 2
+End With
+
+'Insert ASSIGNEDTOID to Row Field & position 3
+With PSheet.PivotTables("AssignedVUnassigned_Report1").PivotFields("ASSIGNEDTOID")
+.Orientation = xlRowField
+.Position = 3
+End With
+
+'Insert RGN_CD to Column Filed & position 1
+With PSheet.PivotTables("AssignedVUnassigned_Report1").PivotFields("RGN_CD")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("AssignedVUnassigned_Report1").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+
+'----------2nd Pivot Assigned V Unassigned------
+'-----------------------------------------------
+
+'Create blank pivot table
+Set PTable2 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(1, 12), TableName:="AssignedVUnassigned_Report2")
+
+
+'Insert to Filter Filed
+'Nothing
+
+
+'Insert PLANNING_WORKTYPE to Row Filed & position 1
+With PSheet.PivotTables("AssignedVUnassigned_Report2").PivotFields("PLANNING_WORKTYPE")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+'Insert Leader/Vendor to Row Field & position 2
+With PSheet.PivotTables("AssignedVUnassigned_Report2").PivotFields("Leader/Vendor")
+.Orientation = xlRowField
+.Position = 2
+End With
+
+'Insert ASSIGNEDTOID to Row Field & position 3
+With PSheet.PivotTables("AssignedVUnassigned_Report2").PivotFields("ASSIGNEDTOID")
+.Orientation = xlRowField
+.Position = 3
+End With
+
+'Insert RGN_CD to Column Filed & position 1
+With PSheet.PivotTables("AssignedVUnassigned_Report2").PivotFields("RGN_CD")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("AssignedVUnassigned_Report2").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+'---------End pivot------------
+
+
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
+
+
+End Sub
+
+
+
+'----------------------
+' PPO Inventory Pivot -
+'----------------------
+
+
+
+Sub PPO_Inventory()
+
+
+
+Dim PTable1 As PivotTable
+Dim PTable2 As PivotTable
+Dim PTable3 As PivotTable
+Dim PTable4 As PivotTable
+Dim PCache As PivotCache
+Dim PRange As Range
+Dim PSheet As Worksheet
+Dim DSheet As Worksheet
+Dim LR As Long
+Dim LC As Long
+
+
+
+
+On Error Resume Next
+
+Application.DisplayAlerts = False
+Application.ScreenUpdating = False
+Worksheets("PPO Inventory Pivot").Delete 'This will delete the exisiting pivot table worksheet
+Worksheets.Add After:=ActiveSheet ' This will add new worksheet
+ActiveSheet.Name = "PPO Inventory Pivot" ' This will rename the worksheet as "Aged Inventory"
+On Error GoTo 0
+
+Set PSheet = Worksheets("PPO Inventory Pivot")
+Set DSheet = Worksheets("Daily Assignment File")
+
+'Find Last used row and column in data sheet
+LR = DSheet.Cells(Rows.Count, 1).End(xlUp).Row
+LC = DSheet.Cells(1, Columns.Count).End(xlToLeft).Column
+
+'Set the pivot table data range
+Set PRange = DSheet.Cells(1, 1).Resize(LR, LC)
+
+'Set pivot cahe
+Set PCache = ActiveWorkbook.PivotCaches.Create(xlDatabase, SourceData:=PRange)
+
+
+'--------------------1st Pivot PPO E&L INVENTORY--------------------
+'-------------------------------------------------------------------
+
+'Create blank pivot table
+Set PTable1 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(1, 1), TableName:="PPO_Inventory_Report1")
+
+
+'Insert STATE_REGULATORY to Filter Filed & Position 1
+With PSheet.PivotTables("PPO_Inventory_Report1").PivotFields("STATE_REGULATORY")
+.Orientation = xlPageField
+.Position = 1
+End With
+
+'Insert HPP_INDICATOR to Filter Filed position 2
+With PSheet.PivotTables("PPO_Inventory_Report1").PivotFields("HPP_INDICATOR")
+.Orientation = xlPageField
+.Position = 1
+End With
+
+'Insert GENERAL_WORKTYPE to Row Filed
+With PSheet.PivotTables("PPO_Inventory_Report1").PivotFields("GENERAL_WORKTYPE")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+
+'Insert PR STATUS to Column Filed
+With PSheet.PivotTables("PPO_Inventory_Report1").PivotFields("PR STATUS")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("PPO_Inventory_Report1").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+
+
+Sheets("PPO Inventory Pivot").Range("A3").Value = "PPO E&L INVENTORY"
+Sheets("PPO Inventory Pivot").Range("A3").Font.Color = vbWhite
+Sheets("PPO Inventory Pivot").Range("A3").Interior.Color = RGB(25, 25, 112) 'RGB(0, 0, 139)
+
+With Worksheets("PPO Inventory Pivot").Range("A3:D3")
+
+    .Merge
+    .HorizontalAlignment = xlCenter
+    .VerticalAlignment = xlCenter
+
+End With
+
+
+'--------------------2nd Pivot HPP----------------------
+'-------------------------------------------------------
+
+Set PTable2 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(20, 1), TableName:="PPO_Inventory_Report2")
+
+
+'Insert STATE_REGULATORY to Filter Filed & Position 1
+With PSheet.PivotTables("PPO_Inventory_Report2").PivotFields("STATE_REGULATORY")
+.Orientation = xlPageField
+.Position = 1
+End With
+
+'Insert HPP_INDICATOR to Filter Filed position 2
+With PSheet.PivotTables("PPO_Inventory_Report2").PivotFields("HPP_INDICATOR")
+.Orientation = xlPageField
+.Position = 1
+.PivotItems("false").Visible = False
+.PivotItems("true").Visible = True
+.PivotItems("(blank)").Visible = False
+End With
+
+'Insert GENERAL_WORKTYPE to Row Filed
+With PSheet.PivotTables("PPO_Inventory_Report2").PivotFields("GENERAL_WORKTYPE")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+
+'Insert PR STATUS to Column Filed
+With PSheet.PivotTables("PPO_Inventory_Report2").PivotFields("PR STATUS")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("PPO_Inventory_Report2").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+
+
+Sheets("PPO Inventory Pivot").Range("A19").Value = "HPP"
+Sheets("PPO Inventory Pivot").Range("A19").Font.Color = vbWhite
+Sheets("PPO Inventory Pivot").Range("A19").Interior.Color = RGB(25, 25, 112) 'RGB(0, 0, 139)
+
+With Worksheets("PPO Inventory Pivot").Range("A19:D19")
+
+    .Merge
+    .HorizontalAlignment = xlCenter
+    .VerticalAlignment = xlCenter
+
+End With
+
+'--------------------3rd Pivot STATE REGULATORY-------------------
+'-----------------------------------------------------------------
+
+Set PTable3 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(35, 1), TableName:="PPO_Inventory_Report3")
+
+
+'Insert STATE_REGULATORY to Filter Filed & Position 1
+With PSheet.PivotTables("PPO_Inventory_Report3").PivotFields("STATE_REGULATORY")
+.Orientation = xlPageField
+.Position = 1
+.PivotItems("No").Visible = False
+.PivotItems("Yes").Visible = True
+End With
+
+'Insert HPP_INDICATOR to Filter Filed position 2
+With PSheet.PivotTables("PPO_Inventory_Report3").PivotFields("HPP_INDICATOR")
+.Orientation = xlPageField
+.Position = 1
+End With
+
+'Insert GENERAL_WORKTYPE to Row Filed
+With PSheet.PivotTables("PPO_Inventory_Report3").PivotFields("GENERAL_WORKTYPE")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+
+'Insert PR STATUS to Column Filed
+With PSheet.PivotTables("PPO_Inventory_Report3").PivotFields("PR STATUS")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("PPO_Inventory_Report3").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+
+
+Sheets("PPO Inventory Pivot").Range("A34").Value = "STATE REGULATORY"
+Sheets("PPO Inventory Pivot").Range("A34").Font.Color = vbWhite
+Sheets("PPO Inventory Pivot").Range("A34").Interior.Color = RGB(25, 25, 112) 'RGB(0, 0, 139)
+
+With Worksheets("PPO Inventory Pivot").Range("A34:D34")
+
+    .Merge
+    .HorizontalAlignment = xlCenter
+    .VerticalAlignment = xlCenter
+
+End With
+
+
+'-----------------4th Pivot STANDARD VOLUME-------------
+'-------------------------------------------------------
+
+Set PTable4 = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(50, 1), TableName:="PPO_Inventory_Report4")
+
+
+'Insert STATE_REGULATORY to Filter Filed & Position 1
+With PSheet.PivotTables("PPO_Inventory_Report4").PivotFields("STATE_REGULATORY")
+.Orientation = xlPageField
+.Position = 1
+.PivotItems("No").Visible = True
+.PivotItems("Yes").Visible = False
+End With
+
+'Insert HPP_INDICATOR to Filter Filed position 2
+With PSheet.PivotTables("PPO_Inventory_Report4").PivotFields("HPP_INDICATOR")
+.Orientation = xlPageField
+.Position = 1
+.PivotItems("false").Visible = True
+.PivotItems("true").Visible = False
+.PivotItems("(blank)").Visible = True
+End With
+
+'Insert GENERAL_WORKTYPE to Row Filed
+With PSheet.PivotTables("PPO_Inventory_Report4").PivotFields("GENERAL_WORKTYPE")
+.Orientation = xlRowField
+.Position = 1
+End With
+
+
+'Insert PR STATUS to Column Filed
+With PSheet.PivotTables("PPO_Inventory_Report4").PivotFields("PR STATUS")
+.Orientation = xlColumnField
+.Position = 1
+End With
+
+'Insert PAR_REQ_REF_NBR column to the data field
+With PSheet.PivotTables("PPO_Inventory_Report4").PivotFields("PAR_REQ_REF_NBR")
+.Orientation = xlDataField
+.Position = 1
+End With
+
+
+Sheets("PPO Inventory Pivot").Range("A49").Value = "STANDARD VOLUME"
+Sheets("PPO Inventory Pivot").Range("A49").Font.Color = vbWhite
+Sheets("PPO Inventory Pivot").Range("A49").Interior.Color = RGB(25, 25, 112) 'RGB(0, 0, 139)
+
+With Worksheets("PPO Inventory Pivot").Range("A49:D49")
+
+    .Merge
+    .HorizontalAlignment = xlCenter
+    .VerticalAlignment = xlCenter
+
+End With
+
+'-----------End Pivot-----------------
+
+
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
+    
+    
+End Sub
+
+
+'----------------------------------------------------------------------------------------------------------------------------
+'                                                        Code End
+'----------------------------------------------------------------------------------------------------------------------------
